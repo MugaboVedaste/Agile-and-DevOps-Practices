@@ -103,3 +103,16 @@ def edit_expense(expense_id):
         return redirect(url_for("main.index"))
 
     return render_template("edit_expense.html", expense=expense)
+
+
+@main.route("/delete/<int:expense_id>", methods=["POST"])
+def delete_expense(expense_id):
+    expense = db.session.get(Expense, expense_id)
+
+    if expense is None:
+        abort(404)
+
+    db.session.delete(expense)
+    db.session.commit()
+
+    return redirect(url_for("main.index"))

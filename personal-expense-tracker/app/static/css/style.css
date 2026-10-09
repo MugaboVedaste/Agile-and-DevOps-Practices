@@ -112,3 +112,18 @@ td {
         flex-direction: column;
     }
 }
+
+
+.delete-form {
+    display: inline;
+    margin: 0;
+}
+
+.delete-button {
+    background: #b42318;
+    margin-left: 6px;
+}
+
+.delete-button:hover {
+    background: #8f1d14;
+}
