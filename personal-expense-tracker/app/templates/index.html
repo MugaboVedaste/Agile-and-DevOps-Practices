@@ -1,0 +1,38 @@
+
+{% extends "base.html" %}
+
+{% block title %}My Expenses{% endblock %}
+
+{% block content %}
+    <div class="page-heading">
+        <h2>My Expenses</h2>
+        <a class="button" href="{{ url_for('main.add_expense') }}">+ Add Expense</a>
+    </div>
+
+    {% if expenses %}
+        <div class="table-wrapper">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Date</th>
+                        <th>Description</th>
+                        <th>Category</th>
+                        <th>Amount (RWF)</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for expense in expenses %}
+                        <tr>
+                            <td>{{ expense.date.strftime('%Y-%m-%d') }}</td>
+                            <td>{{ expense.description }}</td>
+                            <td>{{ expense.category }}</td>
+                            <td>{{ "%.2f"|format(expense.amount) }}</td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    {% else %}
+        <p class="empty-message">No expenses recorded yet. Add your first expense!</p>
+    {% endif %}
+{% endblock %}

@@ -1,0 +1,114 @@
+
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+    background: #f4f6f9;
+    color: #263238;
+}
+
+header {
+    background: #173b57;
+    color: white;
+    padding: 20px;
+}
+
+header h1 {
+    margin: 0 0 12px;
+}
+
+nav a {
+    color: white;
+    margin-right: 18px;
+    text-decoration: none;
+}
+
+.container {
+    max-width: 1000px;
+    margin: 30px auto;
+    padding: 24px;
+    background: white;
+    border-radius: 8px;
+}
+
+.page-heading {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 16px;
+}
+
+.button,
+button {
+    display: inline-block;
+    background: #176b4d;
+    color: white;
+    padding: 10px 16px;
+    border: none;
+    border-radius: 5px;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+form {
+    max-width: 500px;
+}
+
+label {
+    display: block;
+    margin-top: 16px;
+    margin-bottom: 6px;
+}
+
+input,
+select {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ccd3da;
+    border-radius: 5px;
+}
+
+form button {
+    margin-top: 20px;
+}
+
+.table-wrapper {
+    overflow-x: auto;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+}
+
+th,
+td {
+    padding: 12px;
+    text-align: left;
+    border-bottom: 1px solid #e0e5e9;
+}
+
+.error-message {
+    color: #b42318;
+}
+
+.empty-message {
+    padding: 20px 0;
+    color: #65737e;
+}
+
+@media (max-width: 600px) {
+    .container {
+        margin: 12px;
+        padding: 16px;
+    }
+
+    .page-heading {
+        align-items: flex-start;
+        flex-direction: column;
+    }
+}
