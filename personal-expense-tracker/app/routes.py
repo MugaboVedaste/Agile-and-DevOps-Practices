@@ -10,19 +10,40 @@ main = Blueprint("main", __name__)
 
 
 
+
 @main.route("/")
 def index():
-    expenses = Expense.query.order_by(Expense.date.desc()).all()
+    selected_category = request.args.get("category", "").strip()
+
+    query = Expense.query
+
+    if selected_category:
+        query = query.filter_by(category=selected_category)
+
+    expenses = query.order_by(Expense.date.desc()).all()
 
     total_expenses = db.session.query(
         db.func.coalesce(db.func.sum(Expense.amount), 0)
     ).scalar()
 
+    categories = [
+        "Food",
+        "Transport",
+        "Housing",
+        "Education",
+        "Health",
+        "Shopping",
+        "Other",
+    ]
+
     return render_template(
         "index.html",
         expenses=expenses,
         total_expenses=total_expenses,
+        categories=categories,
+        selected_category=selected_category,
     )
+
 
 
 @main.route("/add", methods=["GET", "POST"])
