@@ -1,7 +1,19 @@
 
 from datetime import date
+from flask import jsonify
+from sqlalchemy import text
+from sqlalchemy.exc import SQLAlchemyError
 
-from flask import abort, Blueprint, redirect, render_template, request, url_for
+from flask import (
+    abort,
+    Blueprint,
+    current_app,
+    redirect,
+    render_template,
+    request,
+    url_for,
+    jsonify,
+)
 
 from app import db
 from app.models import Expense
@@ -83,6 +95,11 @@ def add_expense():
 
         db.session.add(expense)
         db.session.commit()
+        current_app.logger.info(
+            "Expense added successfully: id=%s, category=%s",
+            expense.id,
+            expense.category,
+        )
 
         return redirect(url_for("main.index"))
 
@@ -130,6 +147,10 @@ def edit_expense(expense_id):
         expense.date = parsed_date
 
         db.session.commit()
+        current_app.logger.info(
+            "Expense updated successfully: id=%s",
+            expense.id,
+        )
 
         return redirect(url_for("main.index"))
 
@@ -145,5 +166,31 @@ def delete_expense(expense_id):
 
     db.session.delete(expense)
     db.session.commit()
+    current_app.logger.info(
+        "Expense deletion requested: id=%s",
+        expense.id,
+    )
 
     return redirect(url_for("main.index"))
+
+
+@main.route("/status")
+def application_status():
+    try:
+        db.session.execute(text("SELECT 1"))
+
+        return jsonify({
+            "status": "healthy",
+            "database": "connected",
+        }), 200
+
+    except SQLAlchemyError:
+        db.session.rollback()
+        current_app.logger.exception(
+            "Database health check failed"
+        )
+
+        return jsonify({
+            "status": "unhealthy",
+            "database": "disconnected",
+        }), 503
