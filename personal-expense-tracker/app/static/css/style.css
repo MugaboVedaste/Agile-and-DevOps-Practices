@@ -127,3 +127,23 @@ td {
 .delete-button:hover {
     background: #8f1d14;
 }
+
+.total-expenses {
+    background: #f0f7ff;
+    border: 1px solid #cfe3ff;
+    border-radius: 8px;
+    padding: 18px;
+    margin: 20px 0;
+}
+
+.total-expenses h2 {
+    margin: 0 0 8px;
+    font-size: 18px;
+}
+
+.total-expenses p {
+    margin: 0;
+    font-size: 28px;
+    font-weight: bold;
+}
+

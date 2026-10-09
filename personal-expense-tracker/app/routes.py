@@ -9,10 +9,20 @@ from app.models import Expense
 main = Blueprint("main", __name__)
 
 
+
 @main.route("/")
 def index():
     expenses = Expense.query.order_by(Expense.date.desc()).all()
-    return render_template("index.html", expenses=expenses)
+
+    total_expenses = db.session.query(
+        db.func.coalesce(db.func.sum(Expense.amount), 0)
+    ).scalar()
+
+    return render_template(
+        "index.html",
+        expenses=expenses,
+        total_expenses=total_expenses,
+    )
 
 
 @main.route("/add", methods=["GET", "POST"])
