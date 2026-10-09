@@ -5,27 +5,27 @@ from app import create_app, db
 from app.models import Expense
 
 
-@pytest.fixture
-def app():
-    app = create_app({
-        "TESTING": True,
-        "SQLALCHEMY_DATABASE_URI": "sqlite:///:memory:",
-    })
+# @pytest.fixture
+# def app():
+#     app = create_app({
+#         "TESTING": True,
+#         "SQLALCHEMY_DATABASE_URI": "sqlite:///:memory:",
+#     })
 
-    with app.app_context():
-        db.drop_all()
-        db.create_all()
+#     with app.app_context():
+#         db.drop_all()
+#         db.create_all()
 
-    yield app
+#     yield app
 
-    with app.app_context():
-        db.session.remove()
-        db.drop_all()
+#     with app.app_context():
+#         db.session.remove()
+#         db.drop_all()
 
 
-@pytest.fixture
-def client(app):
-    return app.test_client()
+# @pytest.fixture
+# def client(app):
+#     return app.test_client()
 
 
 def test_home_page_loads(client):
@@ -92,3 +92,4 @@ def test_saved_expense_appears_on_home_page(client):
     assert response.status_code == 200
     assert b"Bus fare" in response.data
     assert b"Transport" in response.data
+    assert b"Edit" in response.data

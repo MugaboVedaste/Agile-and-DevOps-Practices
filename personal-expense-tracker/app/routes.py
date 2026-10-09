@@ -1,7 +1,7 @@
 
 from datetime import date
 
-from flask import Blueprint, redirect, render_template, request, url_for
+from flask import abort, Blueprint, redirect, render_template, request, url_for
 
 from app import db
 from app.models import Expense
@@ -59,3 +59,47 @@ def add_expense():
         "add_expense.html",
         today=date.today().isoformat(),
     )
+
+@main.route("/edit/<int:expense_id>", methods=["GET", "POST"])
+def edit_expense(expense_id):
+    expense = db.session.get(Expense, expense_id)
+
+    if expense is None:
+        abort(404)
+
+    if request.method == "POST":
+        description = request.form.get("description", "").strip()
+        amount_text = request.form.get("amount", "").strip()
+        category = request.form.get("category", "").strip()
+        expense_date = request.form.get("date", "").strip()
+
+        if not description or not amount_text or not category or not expense_date:
+            return render_template(
+                "edit_expense.html",
+                expense=expense,
+                error="Please fill in all fields.",
+            )
+
+        try:
+            amount = float(amount_text)
+            parsed_date = date.fromisoformat(expense_date)
+
+            if amount <= 0:
+                raise ValueError
+        except ValueError:
+            return render_template(
+                "edit_expense.html",
+                expense=expense,
+                error="Enter a valid date and an amount greater than zero.",
+            )
+
+        expense.description = description
+        expense.amount = amount
+        expense.category = category
+        expense.date = parsed_date
+
+        db.session.commit()
+
+        return redirect(url_for("main.index"))
+
+    return render_template("edit_expense.html", expense=expense)
