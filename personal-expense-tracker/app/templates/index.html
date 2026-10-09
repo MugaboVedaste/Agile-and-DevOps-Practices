@@ -9,10 +9,34 @@
         <a class="button" href="{{ url_for('main.add_expense') }}">+ Add Expense</a>
     </div>
     
-<div class="total-expenses">
-    <h2>Total Expenses</h2>
-    <p>{{ "%.2f"|format(total_expenses) }} RWF</p>
-</div>
+    <div class="total-expenses">
+        <h2>Total Expenses</h2>
+        <p>{{ "%.2f"|format(total_expenses) }} RWF</p>
+    </div>
+    
+            <form method="GET" action="{{ url_for('main.index') }}" class="filter-form">
+                <label for="category">Filter by category:</label>
+
+                <select name="category" id="category">
+                    <option value="">All Categories</option>
+
+                    {% for category in categories %}
+                        <option value="{{ category }}"
+                            {% if selected_category == category %}selected{% endif %}>
+                            {{ category }}
+                        </option>
+                    {% endfor %}
+                </select>
+
+                <button type="submit">Filter</button>
+
+                {% if selected_category %}
+                    <a class="button" href="{{ url_for('main.index') }}">
+                        Clear Filter
+                    </a>
+                {% endif %}
+            </form>
+
 
 
     {% if expenses %}

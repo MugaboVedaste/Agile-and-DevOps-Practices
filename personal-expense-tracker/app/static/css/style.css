@@ -147,3 +147,27 @@ td {
     font-weight: bold;
 }
 
+
+.filter-form {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin: 20px 0;
+}
+
+.filter-form label {
+    font-weight: bold;
+}
+
+.filter-form select {
+    padding: 9px 12px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    background: white;
+}
+
+.filter-form button {
+    cursor: pointer;
+}
+
