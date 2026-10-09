@@ -9,10 +9,20 @@ from app.models import Expense
 main = Blueprint("main", __name__)
 
 
+
 @main.route("/")
 def index():
     expenses = Expense.query.order_by(Expense.date.desc()).all()
-    return render_template("index.html", expenses=expenses)
+
+    total_expenses = db.session.query(
+        db.func.coalesce(db.func.sum(Expense.amount), 0)
+    ).scalar()
+
+    return render_template(
+        "index.html",
+        expenses=expenses,
+        total_expenses=total_expenses,
+    )
 
 
 @main.route("/add", methods=["GET", "POST"])
@@ -103,3 +113,16 @@ def edit_expense(expense_id):
         return redirect(url_for("main.index"))
 
     return render_template("edit_expense.html", expense=expense)
+
+
+@main.route("/delete/<int:expense_id>", methods=["POST"])
+def delete_expense(expense_id):
+    expense = db.session.get(Expense, expense_id)
+
+    if expense is None:
+        abort(404)
+
+    db.session.delete(expense)
+    db.session.commit()
+
+    return redirect(url_for("main.index"))
